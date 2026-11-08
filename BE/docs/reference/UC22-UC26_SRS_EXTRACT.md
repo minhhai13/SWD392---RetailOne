@@ -1,0 +1,289 @@
+# UC22–UC26 — Focused SRS reading aid
+
+> This is an extract of the supplied project report, **not a replacement** for the original SRS. Confirm interpretations against `RetailOne_Course_Project_Report.docx` (sections II.5.2.2 and Business Rules).
+
+## UC22–UC26: use-case specifications
+
+- **P2275** ID and Name:
+- **P2276** UC-22 Create Purchase Order
+- **P2277** Created By:
+- **P2278** HaiDM
+- **P2279** Date Created:
+- **P2280** 27/09/2026
+- **P2281** Primary Actor:
+- **P2282** Warehouse Staff, Manager
+- **P2283** Secondary Actors:
+- **P2284** None
+- **P2285** Trigger:
+- **P2286** The Warehouse Staff or Manager identifies products requiring stock replenishment (e.g., via Low Stock alerts) and initiates a new purchase order
+- **P2287** Description:
+- **P2288** Allows the Warehouse Staff or Manager to create a new inbound Purchase Order (PO) by selecting an active supplier, choosing products from that supplier's catalog, and specifying order quantities for inventory replenishment
+- **P2289** Preconditions:
+- **P2290** PRE-1: The user is authenticated and logged into the RetailOne system with Warehouse Staff or Manager role
+- **P2291** PRE-2: At least one supplier with Active status exists in the system.
+- **P2292** PRE-3: Products and their configured supply prices have been mapped to the supplier's catalog
+- **P2293** Postconditions:
+- **P2294** POST-1: A new Purchase Order record with a unique PO ID and creation timestamp is saved in the database.
+- **P2295** POST-2: The Purchase Order status is initialized to PENDING(awaiting Manager approval)
+- **P2296** POST-3: No actual product inventory quantities are incremented at this stage
+- **P2297** Normal Flow:
+- **P2298** 22.0 Create Purchase Order
+- **P2299** 1. The user selects the option to create a new Purchase Order (PO).
+- **P2300** 2. The system displays the PO creation form with a list of active suppliers.
+- **P2301** 3. The user selects a supplier.
+- **P2302** 4. The system loads the selected supplier's product catalog and configured supply prices.
+- **P2303** 5. The user selects products and enters valid order quantities.
+- **P2304** 6. The system calculates line-item subtotals and the total PO value.
+- **P2305** 7. The user submits the Purchase Order.
+- **P2306** 8. The system validates the inputs, generates a unique PO ID, saves the PO with status PENDING, and displays the PO details.
+- **P2307** Alternative Flows:
+- **P2308** 22.1 Create Purchase Order from Low-Stock List
+- **P2309** 1. The user selects low-stock products from the Stock Level screen and chooses to generate a PO.
+- **P2310** 2. The system filters active suppliers providing those products.
+- **P2311** 3. The user selects a supplier, and the system pre-populates the products into the PO form.
+- **P2312** 4. Resume at Step 5 of the normal flow.
+- **P2313** 22.2 Modify or Remove Draft Items
+- **P2314** 1 .The user updates item quantities or removes items before submission.
+- **P2315** 2. The system recalculates subtotals and the total PO value.
+- **P2316** 22.3 Cancel purchase order creation
+- **P2317** 1. The user cancels the operation before submission.
+- **P2318** 2. The system discards the draft and returns to the PO list.
+- **P2319** Exceptions:
+- **P2320** 22.0.E1 Invalid Quantity or Empty Item List
+- **P2321** 1. The user enters a non-positive/non-integer quantity or submits an empty item list.
+- **P2322** 2. The system displays a validation error and prompts the user to correct the input
+- **P2323** 22.0.E2 Supplier Has No Mapped Products
+- **P2324** 1. The selected supplier has no active mapped products.
+- **P2325** 2. The system notifies the user and prompts them to select another supplier or cancel.
+- **P2326** 22.0.E3 Database Save Failure
+- **P2327** 1. The system fails to save the PO due to a system error.
+- **P2328** 2. The system rolls back the transaction and notifies the user to retry.
+- **P2329** Priority:
+- **P2330** High
+- **P2331** Frequency of Use:
+- **P2332** Weekly, approximately 5–15 times per week depending on inventory turnover.
+- **P2333** Business Rules:
+- **P2334** BR-02, BR-41, BR-42, BR-81, BR-86
+- **P2335** Other Information:
+- **P2336** Newly created Purchase Orders cannot be used for Goods Receipt until they are approved by a Manager
+- **P2337** Assumptions:
+- **P2338** Supplier profiles and supplier-product catalog mappings have already been configured by the Manager
+- **P2340** ID and Name:
+- **P2341** UC-23 View Purchase Orders
+- **P2342** Created By:
+- **P2343** HaiDM
+- **P2344** Date Created:
+- **P2345** 28/09/2026
+- **P2346** Primary Actor:
+- **P2347** Warehouse Staff, Manager
+- **P2348** Secondary Actors:
+- **P2349** None
+- **P2350** Trigger:
+- **P2351** The Manager or Warehouse Staff selects the option to view the list of purchase orders.
+- **P2352** Description:
+- **P2353** Allows the Warehouse Staff and Manager to view, search, filter, and sort the list of purchase orders that have been created or submitted in the system.
+- **P2354** Preconditions:
+- **P2355** PRE-1: The user is authenticated and logged into the RetailOne system with a Manager or Warehouse Staff role
+- **P2356** PRE-2: Purchase Order records exist in the database.
+- **P2357** Postconditions:
+- **P2358** POST-1: The summary list of purchase orders is accurately displayed to the user.
+- **P2359** POST-2: No purchase order records or inventory data are modified (read-only operation).
+- **P2360** Normal Flow:
+- **P2361** 23.0 View Purchase Orders
+- **P2362** 1. The user selects the option to view Purchase Orders.
+- **P2363** 2. The system retrieves all PO records ordered by creation date (newest first).
+- **P2364** 3. The system displays the PO list (PO ID, Creation Date, Supplier Name, Created By, Total Value, and Order Status).
+- **P2365** Alternative Flows:
+- **P2366** 23.1 Filter by Status or Date Range
+- **P2367** 1. The user filters the list by Order Status (PENDING, APPROVED, RECEIVED, CANCELED) or a valid date range.
+- **P2368** 2. The system displays matching PO records.
+- **P2369** 23.2 Search Purchase Order
+- **P2370** 1. The user enters a PO ID or Supplier Name into the search box.
+- **P2371** 2. The system displays matching PO records.
+- **P2372** 23.3 Sort Purchase Order List
+- **P2373** 1. The user selects a column header (Creation Date, Supplier Name, Total Value, or Status) to sort.
+- **P2374** 2. The system reorders and displays the PO list accordingly.
+- **P2375** Exceptions:
+- **P2376** 23.0.E1 No Matching Records
+- **P2377** 1. No PO matches the search or filter criteria.
+- **P2378** 2. The system displays a "No matching purchase orders found" message.
+- **P2379** 23.0.E2 Database Retrieval Error
+- **P2380** 1. The system fails to retrieve PO records due to a database error.
+- **P2381** 2. The system logs the error and displays an error notification.
+- **P2382** Priority:
+- **P2383** High
+- **P2384** Frequency of Use:
+- **P2385** Daily, approximately 10–30 times per day during warehouse and purchasing operations.
+- **P2386** Business Rules:
+- **P2387** BR-02, BR-42
+- **P2388** Other Information:
+- **P2389** This use case performs a read-only query; if a systemic error or connection timeout occurs, the database state remains unchanged.
+- **P2390** Assumptions:
+- **P2391** The user has appropriate role-based access permissions to view purchasing records
+- **P2393** ID and Name:
+- **P2394** UC-24 View Purchase Order Details
+- **P2395** Created By:
+- **P2396** HaiDM
+- **P2397** Date Created:
+- **P2398** 28/09/2026
+- **P2399** Primary Actor:
+- **P2400** Warehouse Staff, Manager
+- **P2401** Secondary Actors:
+- **P2402** None
+- **P2403** Trigger:
+- **P2404** The Manager or Warehouse Staff selects a specific purchase order from the purchase order list to view its details.
+- **P2405** Description:
+- **P2406** Allows the Warehouse Staff and Manager to view the complete details of a selected Purchase Order, including supplier information, ordered product line items, supply prices, quantities, total value, and approval/receipt status history.
+- **P2407** Preconditions:
+- **P2408** PRE-1: The user is authenticated and logged into the RetailOne system with a Manager or Warehouse Staff role.
+- **P2409** PRE-2: The user is viewing the Purchase Order list and a valid Purchase Order record exists.
+- **P2410** Postconditions:
+- **P2411** POST-1: Full details and line items of the selected Purchase Order are displayed on the screen.
+- **P2412** POST-2: No data is modified during the detail view operation.
+- **P2413** Normal Flow:
+- **P2414** 24.0 View Purchase Order Details
+- **P2415** 1. The user selects a specific Purchase Order from the PO list.
+- **P2416** 2. The system retrieves the PO header, supplier info, line items, and status history.
+- **P2417** 3. The system displays the full PO details (PO ID, timestamps, creator/approver, supplier details, item list with supply prices/quantities, and total value).
+- **P2418** 4. The system displays available action buttons based on the PO status and user role.
+- **P2419** Alternative Flows:
+- **P2420** 24.1 Return to Purchase Order List
+- **P2421** 1. The user clicks the "Back to List" button.
+- **P2422** 2. The system returns to the PO list while preserving previous filters.
+- **P2423** Exceptions:
+- **P2424** 24.0.E1 Purchase Order Record Not Found
+- **P2425** 1. The system cannot retrieve the selected PO record.
+- **P2426** 2. The system displays an error message and redirects the user to the PO list.
+- **P2427** Priority:
+- **P2428** High
+- **P2429** Frequency of Use:
+- **P2430** Daily, approximately 10–25 times per day.
+- **P2431** Business Rules:
+- **P2432** BR-02, BR-42, BR-84
+- **P2433** Other Information:
+- **P2434** This use case is a read-only operation; any unexpected network disconnection or retrieval failure leaves the Purchase Order state unchanged in the database.
+- **P2435** Assumptions:
+- **P2436** Selected Purchase Order data is synchronized with the latest approval and goods receipt transactions.
+- **P2438** ID and Name:
+- **P2439** UC-25 Approve Purchase Order
+- **P2440** Created By:
+- **P2441** HaiDM
+- **P2442** Date Created:
+- **P2443** 28/09/2026
+- **P2444** Primary Actor:
+- **P2445** Manager
+- **P2446** Secondary Actors:
+- **P2447** None
+- **P2448** Trigger:
+- **P2449** The Manager selects a pending Purchase Order to review and approve.
+- **P2450** Description:
+- **P2451** Allows the Manager to review and approve a pending Purchase Order before it is sent to the supplier and processed for goods receipt.
+- **P2452** Preconditions:
+- **P2453** PRE-1: The Manager is logged into the RetailOne system.
+- **P2454** PRE-2: The selected Purchase Order exists and has a PENDING status.
+- **P2455** Postconditions:
+- **P2456** POST-1: The Purchase Order status is updated to APPROVED.
+- **P2457** POST-2: The approver's ID and approval timestamp are recorded.
+- **P2458** POST-3: The Purchase Order becomes eligible for goods receipt processing.
+- **P2459** Normal Flow:
+- **P2460** 25.0 Approve Purchase Order
+- **P2461** 1. The Manager views the details of a Purchase Order with PENDING status.
+- **P2462** 2. The Manager reviews the supplier, product items, quantities, and supply prices, then selects "Approve".
+- **P2463** 3. The system validates that the Purchase Order is still PENDING and that the supplier and products remain active.
+- **P2464** 4. The system updates the Purchase Order status to APPROVED and records the Manager's ID and approval timestamp.
+- **P2465** 5. The system displays a success message and refreshes the Purchase Order details.
+- **P2466** Alternative Flows:
+- **P2467** 25.1 Cancel Approval Confirmation
+- **P2468** 1. The Manager dismisses the confirmation prompt before finalizing the approval.
+- **P2469** 2. The system closes the prompt and retains the Purchase Order in PENDING status.
+- **P2470** Exceptions:
+- **P2471** 25.0.E1 Invalid Purchase Order Status
+- **P2472** 1. The system detects that the Purchase Order is no longer in PENDING status (already approved or canceled).
+- **P2473** 2. The system rejects the action, displays an error message, and refreshes the Purchase Order view.
+- **P2474** 25.0.E2 Inactive Supplier or Product
+- **P2475** 1. The system detects that the supplier or any ordered product has been deactivated (Inactive).
+- **P2476** 2. The system prevents approval and notifies the Manager.
+- **P2477** 25.0.E3 Database Update Error
+- **P2478** 1. The system fails to update the Purchase Order due to a database error.
+- **P2479** 2. The system rolls back the transaction and prompts the Manager to retry.
+- **P2480** Priority:
+- **P2481** High
+- **P2482** Frequency of Use:
+- **P2483** Weekly, approximately 5–15 times per week.
+- **P2484** Business Rules:
+- **P2485** BR-02, BR-42, BR-45, BR-86
+- **P2486** Other Information:
+- **P2487** Inventory quantities are not modified during PO approval; stock is only incremented upon confirming goods receipt. If a system failure occurs during execution, the transaction is rolled back and the PO remains PENDING.
+- **P2488** Assumptions:
+- **P2489** The Manager has reviewed current stock levels and purchasing needs prior to approving the order.
+- **P2491** ID and Name:
+- **P2492** UC-26 Cancel Purchase Order
+- **P2493** Created By:
+- **P2494** HaiDM
+- **P2495** Date Created:
+- **P2496** 28/09/2026
+- **P2497** Primary Actor:
+- **P2498** Manager
+- **P2499** Secondary Actors:
+- **P2500** None
+- **P2501** Trigger:
+- **P2502** The Manager selects a Purchase Order to cancel when goods are not delivered or cannot be received.
+- **P2503** Description:
+- **P2504** Allows the Manager to cancel an unreceived Purchase Order (PENDING or APPROVED) and record the cancellation reason.
+- **P2505** Preconditions:
+- **P2506** PRE-1: The Manager is logged into the RetailOne system.
+- **P2507** PRE-2: The selected Purchase Order exists and has a PENDING or APPROVED status (no Goods Receipt confirmed).
+- **P2508** Postconditions:
+- **P2509** POST-1: The Purchase Order status is updated to CANCELED.
+- **P2510** POST-2: The cancellation reason, Manager's ID, and timestamp are recorded.
+- **P2511** POST-3: The Purchase Order is locked from further approval or goods receipt processing, and no inventory quantities are modified.
+- **P2512** Normal Flow:
+- **P2513** 26.0 Cancel Purchase Order
+- **P2514** 1. The Manager views the details of a Purchase Order with PENDING or APPROVED status.
+- **P2515** 2. The Manager selects the "Cancel" option.
+- **P2516** 3. The Manager enters a cancellation reason and confirms the action.
+- **P2517** 4. The system validates that no Goods Receipt has been confirmed against the Purchase Order.
+- **P2518** 5. The system updates the Purchase Order status to CANCELED and records the Manager's ID, cancellation timestamp, and reason.
+- **P2519** 6. The system displays a success message and refreshes the Purchase Order details.
+- **P2520** Alternative Flows:
+- **P2521** 26.1 Abort Cancellation
+- **P2522** 1. The Manager dismisses the confirmation prompt before finalizing the cancellation.
+- **P2523** 2. The system closes the prompt and retains the current Purchase Order status.
+- **P2524** Exceptions:
+- **P2525** 26.0.E1 Goods Receipt Already Confirmed or Invalid Status
+- **P2526** 1. The system detects that the Purchase Order has already been received (RECEIVED) or canceled (CANCELED).
+- **P2527** 2. The system rejects the action, displays an error message, and refreshes the Purchase Order view.
+- **P2528** 26.0.E2 Missing Cancellation Reason
+- **P2529** 1. The Manager confirms cancellation without providing a reason.
+- **P2530** 2. The system prompts the Manager to enter a valid cancellation reason.
+- **P2531** 26.0.E3 Database Update Error
+- **P2532** 1. The system fails to update the Purchase Order status due to a database or system error.
+- **P2533** 2.The system rolls back the transaction, logs the error, and prompts the Manager to retry.
+- **P2534** Priority:
+- **P2535** Medium
+- **P2536** Frequency of Use:
+- **P2537** Low, approximately 1–3 times per week when delivery issues occur.
+- **P2538** Business Rules:
+- **P2539** BR-02, BR-42, BR-43
+- **P2540** Other Information:
+- **P2541** Once marked as CANCELED, a Purchase Order is permanently locked and cannot be reopened or received. If a system failure occurs during execution, the transaction is rolled back and the PO retains its previous status.
+- **P2542** Assumptions:
+- **P2543** For APPROVED orders that have already been dispatched to the supplier, the Manager notifies the supplier externally regarding the order cancellation.
+
+## Selected Business Rules (from SRS)
+
+- **BR-02 — Strict Role Isolation**: Cashiers are strictly prohibited from accessing the configuration features (Product, Supplier, Staff, Shift) reserved for Managers.
+- **BR-41 — Low Stock Trigger**: Products with Stock <= Min Threshold will automatically appear on the low stock report for purchasing.
+- **BR-42 — PO Lifecycle Control**: A Purchase Order is PENDING by default upon creation; only Managers can Approve it.
+- **BR-43 — PO Cancellation Block**: A Purchase Order cannot be Cancelled if its status is already RECEIVED.
+- **BR-45 — Inventory Update Timing**: Upon Goods Receipt confirmation, inventory increases by actual received quantity and the Purchase Order status changes to RECEIVED, including accepted partial deliveries.
+- **BR-81 — Cost Price Validity**: The configured cost price for a supplier's product must be greater than 0.
+- **BR-84 — Historical Data Integrity**: Profile updates do not alter supplier data on previously completed Purchase Orders.
+- **BR-86 — Ordering Restriction**: Creating Purchase Orders from the detail screen of an Inactive supplier is blocked.
+
+## Differences to resolve explicitly
+
+- UC22 states non-integer quantities are invalid, but the physical database uses `DECIMAL(15,3)` and Products has `allowDecimalQuantity`; do not assume a policy without verifying requirements.
+- UC24 asks for status history, whereas the provided SQL schema shows lifecycle timestamps but no dedicated PO status-history table.
+- The provided `(4).sql` has no `UQ_GRI_POItem`, despite an earlier discussion; this concerns the UC31 boundary. Do not silently add it.
+

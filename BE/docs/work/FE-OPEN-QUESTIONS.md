@@ -1,0 +1,14 @@
+# FE-OPEN-QUESTIONS — phát hiện khi tích hợp Frontend ↔ Backend
+
+Không sửa backend (CLAUDE.md FE §10.1). Mỗi mục có bằng chứng và phương án tối thiểu.
+
+| # | Phát hiện | Bằng chứng | Ảnh hưởng | Xử lý hiện tại | Đề xuất tối thiểu (chưa làm, cần được giao) |
+|---|---|---|---|---|---|
+| F1 | Backend dùng `cors()` mặc định: **không** có `Access-Control-Expose-Headers`, nên trình duyệt (khác origin) không đọc được header `Idempotent-Replay`. | `npm run contract` (INFO CORS): `access-control-allow-origin=*; access-control-expose-headers=(not set)`; Node thấy header, trình duyệt thì không. Backend: `src/index.js` (`app.use(cors())`). | UC22: FE không nhận biết replay bằng header. | FE nhận biết replay bằng **HTTP status**: `201` = tạo mới, `200` = replay của yêu cầu trước (đúng với `controllers/purchaseOrder.controller.js`). Đã có test `poCreate.test.jsx` (replay 200). | `app.use(cors({ exposedHeaders: ['Idempotent-Replay'] }))` (1 dòng), hoặc dùng Vite proxy cùng origin. |
+| F2 | Múi giờ: cột `DATETIME2` do `SYSDATETIME()` (giờ máy chủ DB, không kèm timezone); API trả chuỗi ISO có hậu tố `Z`. | `OPEN-QUESTIONS.md` Q8 của backend. Quan sát thật: SQL Server Docker (UTC) → FE đổi sang `Asia/Ho_Chi_Minh` (+7) hiển thị đúng giờ hiện tại (21:32 khi đồng hồ máy 21:32). | Nếu SQL Server chạy giờ địa phương Việt Nam (không phải UTC) thì giờ hiển thị sẽ lệch +7h. | FE luôn đổi từ UTC sang giờ Việt Nam (`utils/format.js`). | Chuẩn hóa múi giờ DB (UTC) hoặc backend trả offset đúng. Bộ lọc ngày `from`/`to` dùng ngày lịch của DB (không đổi múi giờ). |
+| F3 | `requirePasswordChange` có trong `/auth/me` nhưng không có API đổi mật khẩu. | `docs/work/OPEN-QUESTIONS.md` Q15 (backend). | Không thể đổi mật khẩu bằng UI. | FE chỉ hiển thị thông báo giới hạn (AppLayout), không gọi endpoint không tồn tại. | Ngoài phạm vi 5 UC. |
+| F4 | UC22.1 không có màn hình Stock Level (UC21). | CLAUDE.md FE §1, §5.4. | FE không có luồng "tạo PO từ danh sách low-stock". | `supplierApi.getSuppliersByVariants` có sẵn, đã kiểm tra bằng `contract-check`; không có UI. | Khi UC21 được làm, gọi hàm này để điền sẵn NCC/sản phẩm. |
+| F5 | Idempotency của backend nằm trong bộ nhớ tiến trình (backend Q17). | Backend `src/infrastructure/idempotency.js`. | Sau khi backend restart, retry cùng key có thể tạo PO mới. | `COMMIT_OUTCOME_UNKNOWN`: FE chặn gửi lại cho đến khi người dùng xác nhận đã kiểm tra danh sách. Lỗi mạng/timeout: retry dùng cùng key (chống trùng nếu backend còn chạy). | Idempotency bền vững cần đổi schema (backend Q17). |
+| F6 | Vị trí thư mục: CLAUDE.md FE đặt `frontend/` trong thư mục backend; người dùng yêu cầu `FE/` cùng cấp. | Yêu cầu của người dùng. | Chỉ khác đường dẫn. | FE ở `/Users/minhhai1209/SWD392/FE`. | Có thể chuyển vào `frontend/` nếu giảng viên yêu cầu. |
+
+Không phát hiện sai khác giữa SRS UC22–UC26 và API hiện tại ở mức ảnh hưởng đến FE. Contract thực tế khớp tài liệu (`npm run contract`: 33/33).

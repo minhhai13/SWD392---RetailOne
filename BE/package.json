@@ -1,0 +1,36 @@
+{
+  "name": "retailone-pos-uc22-uc26",
+  "version": "1.0.0",
+  "description": "RetailOne POS backend (Node.js/Express + SQL Server) - UC22-UC26 Purchase Order management",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "node --test --test-concurrency=1 test/unit/*.test.js test/integration/*.test.js",
+    "test:unit": "node --test test/unit/*.test.js",
+    "test:integration": "node --test --test-concurrency=1 test/integration/*.test.js",
+    "db:setup-test": "node scripts/setup-test-db.js",
+    "db:seed-dev": "node scripts/seed-dev.js",
+    "db:reset-demo-passwords": "node scripts/reset-demo-passwords.js",
+    "db:generate-sql": "node scripts/generate-seed-sql.js"
+  },
+  "keywords": [
+    "nodejs",
+    "expressjs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
+    "mssql": "^12.7.14"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  },
+  "private": true
+}

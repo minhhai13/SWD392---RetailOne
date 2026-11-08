@@ -1,0 +1,27 @@
+# Secrets / local configuration
+.env
+.env.*
+!.env.example
+**/*.p12
+**/*.pfx
+**/*.pem
+**/secrets.*
+
+# Runtime artifacts
+node_modules/
+.cache/
+coverage/
+dist/
+build/
+logs/
+*.log
+*.pid
+.migration-work/
+
+# IDE & OS
+.DS_Store
+.idea/
+.vscode/
+
+# generated SQL (contains password hashes)
+generated/
