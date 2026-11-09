@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { vi } from 'vitest'
-import { authApi } from '../src/api/authApi'
-import { AuthProvider } from '../src/auth/AuthContext'
-import { ToastProvider } from '../src/components/common/ToastProvider'
-import { routes } from '../src/routes'
-import { setToken } from '../src/utils/tokenStorage'
+import { authApi } from '../src/features/auth/services/authApi'
+import { AuthProvider } from '../src/features/auth/AuthContext'
+import { ToastProvider } from '../src/shared/components/ToastProvider'
+import { routes } from '../src/app/routes'
+import { setToken } from '../src/features/auth/utils/tokenStorage'
 
 export const USERS = {
   manager: { id: 1, username: 'manager', staffId: 1, fullName: 'Demo Manager', role: { name: 'Manager' }, permissions: ['APPROVE_PURCHASE_ORDER', 'CANCEL_PURCHASE_ORDER', 'CREATE_PURCHASE_ORDER', 'VIEW_PURCHASE_ORDER'], requirePasswordChange: false },

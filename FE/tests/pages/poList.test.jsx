@@ -1,8 +1,8 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { ApiError } from '../../src/api/axiosClient'
-import { purchaseOrderApi } from '../../src/api/purchaseOrderApi'
+import { ApiError } from '../../src/shared/services/apiClient'
+import { purchaseOrderApi } from '../../src/features/purchase-order/services/purchaseOrderApi'
 import { listResult, makeListItem, renderApp, USERS } from '../helpers'
 
 const rows = (n) => Array.from({ length: n }, (_, i) => makeListItem(i + 1))

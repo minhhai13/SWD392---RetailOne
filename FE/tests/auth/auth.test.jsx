@@ -1,10 +1,10 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { authApi } from '../../src/api/authApi'
-import { apiClient, ApiError, toApiError } from '../../src/api/axiosClient'
-import { purchaseOrderApi } from '../../src/api/purchaseOrderApi'
-import { getToken, setToken } from '../../src/utils/tokenStorage'
+import { authApi } from '../../src/features/auth/services/authApi'
+import { apiClient, ApiError, toApiError } from '../../src/shared/services/apiClient'
+import { purchaseOrderApi } from '../../src/features/purchase-order/services/purchaseOrderApi'
+import { getToken, setToken } from '../../src/features/auth/utils/tokenStorage'
 import { listResult, makeListItem, renderApp, USERS } from '../helpers'
 
 const emptyList = () => vi.spyOn(purchaseOrderApi, 'list').mockResolvedValue(listResult([makeListItem(1)]))

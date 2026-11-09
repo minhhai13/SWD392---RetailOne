@@ -1,10 +1,10 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { ApiError } from '../../src/api/axiosClient'
-import { purchaseOrderApi } from '../../src/api/purchaseOrderApi'
-import { supplierApi } from '../../src/api/supplierApi'
-import { isValidIdempotencyKey } from '../../src/utils/idempotency'
+import { ApiError } from '../../src/shared/services/apiClient'
+import { purchaseOrderApi } from '../../src/features/purchase-order/services/purchaseOrderApi'
+import { supplierApi } from '../../src/features/purchase-order/services/supplierApi'
+import { isValidIdempotencyKey } from '../../src/features/purchase-order/utils/idempotency'
 import { makePo, renderApp, USERS } from '../helpers'
 
 const SUPPLIERS = [
